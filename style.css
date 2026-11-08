@@ -1,0 +1,451 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: #001a2e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.game-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    font-family: 'Fredoka One', cursive;
+    background: linear-gradient(180deg, #4dd0e1 0%, #009dc4 40%, #006994 100%);
+    border-radius: 0;
+    overflow: hidden;
+    position: relative;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    background: rgba(0,0,0,0.35);
+    color: white;
+    font-size: 1.1em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
+}
+
+.header-left, .header-center, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-center {
+    flex: 1;
+    justify-content: center;
+}
+
+.lives-display {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.heart {
+    font-size: 1.4em;
+    transition: all 0.3s;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.heart.lost {
+    opacity: 0.3;
+    transform: scale(0.8);
+    filter: grayscale(100%);
+}
+
+.heart.lost-animation {
+    animation: heartBreak 0.5s ease-out;
+}
+
+@keyframes heartBreak {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3) rotate(10deg); }
+    100% { transform: scale(0.8) rotate(0deg); opacity: 0.3; }
+}
+
+.score-display {
+    color: #ffd700;
+    font-size: 1.4em;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+.level-display {
+    color: #feca57;
+    font-size: 1.2em;
+}
+
+.mute-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: white;
+}
+
+.mute-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.overlay {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,30,60,0.9);
+    color: white;
+    z-index: 10;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    color: #ffd700;
+    text-shadow: 3px 3px 0 #006994, 0 0 30px rgba(255,215,0,0.5);
+    animation: float 2s ease-in-out infinite;
+}
+
+.overlay h2 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.overlay p {
+    font-size: 1.3em;
+    margin-bottom: 25px;
+    opacity: 0.9;
+    text-align: center;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.btn {
+    padding: 15px 50px;
+    font-size: 1.3em;
+    font-family: 'Fredoka One', cursive;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 5px;
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #feca57, #ff9f43);
+    color: white;
+    box-shadow: 0 8px 25px rgba(255,159,67,0.5), 0 0 20px rgba(255,159,67,0.3);
+}
+
+.btn-start:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(255,159,67,0.7);
+}
+
+.btn-start:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.controls-hint {
+    margin-top: 25px;
+    font-size: 1em;
+    opacity: 0.8;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.key {
+    display: inline-block;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.fish-selector {
+    display: flex;
+    gap: 20px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.fish-option {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+}
+
+.fish-option:hover {
+    transform: scale(1.15) translateY(-5px);
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.fish-option.selected {
+    border-color: #ffd700;
+    background: rgba(255,215,0,0.2);
+    box-shadow: 0 0 30px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.2);
+    transform: scale(1.1);
+}
+
+.fish-name {
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.35em;
+    white-space: nowrap;
+    color: white;
+    opacity: 0.8;
+}
+
+.level-complete {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,100,50,0.95);
+    padding: 40px 60px;
+    border-radius: 25px;
+    color: white;
+    font-size: 2.2em;
+    z-index: 20;
+    display: none;
+    text-align: center;
+    animation: popIn 0.6s ease-out;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,255,100,0.3);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.level-complete .level-name {
+    font-size: 0.5em;
+    opacity: 0.9;
+    margin-top: 10px;
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); }
+    60% { transform: translate(-50%, -50%) scale(1.1) rotate(3deg); }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+.damage-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,0,0,0.3);
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.damage-flash.active {
+    opacity: 1;
+}
+
+.invincible {
+    animation: blink 0.15s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.progress-container {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    z-index: 5;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    border-radius: 8px;
+    transition: width 0.3s;
+    box-shadow: 0 0 10px rgba(46,204,113,0.5);
+}
+
+.progress-flag {
+    position: absolute;
+    right: -5px;
+    top: -8px;
+    font-size: 1.5em;
+    animation: flagWave 1s ease-in-out infinite;
+}
+
+@keyframes flagWave {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+.combo-text {
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.8);
+    pointer-events: none;
+    z-index: 15;
+    animation: comboFloat 1s ease-out forwards;
+}
+
+@keyframes comboFloat {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
+}
+
+.final-stats {
+    background: rgba(0,0,0,0.3);
+    padding: 20px 40px;
+    border-radius: 15px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.final-stats .stat {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+.final-stats .stat-value {
+    color: #ffd700;
+    font-size: 1.3em;
+}
+
+@media (max-width: 600px) {
+    .overlay h1 { font-size: 2.2em; }
+    .overlay h2 { font-size: 1.8em; }
+    .fish-option { width: 60px; height: 60px; font-size: 2em; }
+    #gameCanvas { height: 100%; }
+    .game-header { padding: 8px 15px; font-size: 0.9em; }
+}
+/* إجبار حاوية اللعبة على التجاوب التام والظهور العمودي السليم */
+.game-container {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 450px !important;
+    max-height: 850px !important;
+    margin: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* تنسيق الـ Canvas ليتمدد داخل الحاوية دون أي قص */
+canvas#gameCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    flex-grow: 1 !important;
+}
+
+/* التكيف التلقائي عند قلب الهاتف للوضع الأفقي لضمان عدم قص الشاشة */
+@media screen and (orientation: landscape) {
+    .game-container {
+        width: auto !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        aspect-ratio: 9 / 16 !important; /* يحافظ على شكل شاشة الهاتف العمودية في المنتصف */
+        margin: 0 auto !important;
+    }
+
+    canvas#gameCanvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+    }
+}

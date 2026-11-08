@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <script>
+(function(ntb){
+var d = document,
+    s = d.createElement('script'),
+    l = d.currentScript || d.scripts[d.scripts.length - 1];
+s.settings = ntb || {};
+s.src = "\/\/embellishedcoffee.com\/bBX.VesJdoGUlQ0LYRWscB\/ke\/mS9\/u_Z\/UklLkRP\/TUc\/2CMnDhMI3AOXTPMCtlNiz\/YSw\/MEz\/cW5_NQwu";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+    <title>🐠 Ocean Adventure - مغامرة المحيط</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      html, body {
+          margin: 0 !important;
+          padding: 0 !important;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          background: linear-gradient(135deg, #0066cc, #0099ff) !important;
+      }
+      
+      .game-wrapper {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          width: 100% !important;
+          height: calc(100% - 50px) !important;
+          margin-top: 50px !important;
+      }
+
+      /* 👈 هنا التعديل لإنزال شريط العدادات والمرحلة للأسفل داخل نافذة اللعبة لتوفير مساحة للإعلان */
+      .game-header {
+          margin-top: 25px !important;
+      }
+
+      .progress-container {
+          margin-top: 5px !important;
+      }
+
+      .game-container {
+          max-height: 100% !important;
+      }
+
+      /* حماية أزرار التحكم السفلية */
+      div[class*="control"], div[id*="control"], .ui-bottom {
+          padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+          box-sizing: border-box;
+      }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-container" id="gameContainer">
+            <div class="game-header">
+                <div class="header-left">
+                    <div class="level-display">🌊 المرحلة <span id="levelNum">1</span></div>
+                </div>
+                <div class="header-center">
+                    <div class="lives-display" id="livesDisplay">
+                        <span class="heart" id="heart1">❤️</span>
+                        <span class="heart" id="heart2">❤️</span>
+                        <span class="heart" id="heart3">❤️</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="score-display">⭐ <span id="scoreNum">0000</span></div>
+                    <button class="mute-btn" id="muteBtn" title="كتم/إلغاء كتم الصوت">🔊</button>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+                <span class="progress-flag">🏁</span>
+            </div>
+            <canvas id="gameCanvas" width="900" height="500"></canvas>
+            <div class="damage-flash" id="damageFlash"></div>
+            
+            <div class="overlay" id="startScreen">
+                <h1>🐠 مغامرة المحيط</h1>
+                <p>اختر سمكتك وانطلق في رحلة عبر أعماق المحيط!<br>تجنب الشعاب المرجانية، اجمع العملات، ووصل إلى النهاية!</p>
+                <div class="fish-selector">
+                    <div class="fish-option selected" data-fish="blue" data-name="السمكة الزرقاء">
+                        🐟<span class="fish-name">السمكة الزرقاء</span>
+                    </div>
+                    <div class="fish-option" data-fish="clown" data-name="سمكة المهرج">
+                        🐠<span class="fish-name">سمكة المهرج</span>
+                    </div>
+                    <div class="fish-option" data-fish="yellow" data-name="السمكة الذهبية">
+                        🐡<span class="fish-name">السمكة الذهبية</span>
+                    </div>
+                    <div class="fish-option" data-fish="shark" data-name="القرش الصغير">
+                        🦈<span class="fish-name">القرش الصغير</span>
+                    </div>
+                </div>
+                <button class="btn btn-start" id="startBtn">🎮 ابدأ اللعبة!</button>
+                <div class="controls-hint">
+                    <span>🎯 التحكم:</span>
+                    <span class="key">↑</span>
+                    <span class="key">↓</span>
+                    <span class="key">←</span>
+                    <span class="key">→</span>
+                    <span>أو اسحب بالماوس/اللمس</span>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="gameOverScreen">
+                <h2>💥 انتهت اللعبة!</h2>
+                <div class="final-stats">
+                    <div class="stat">النقاط: <span class="stat-value" id="finalScore">0</span></div>
+                    <div class="stat">أعلى مرحلة: <span class="stat-value" id="finalLevel">1</span></div>
+                    <div class="stat">العملات المجمعة: <span class="stat-value" id="finalCoins">0</span></div>
+                </div>
+                <button class="btn btn-start" id="restartBtn">🔄 حاول مرة أخرى</button>
+            </div>
+            
+            <div class="level-complete" id="levelComplete">
+                <div>🎉 مرحلة مكتملة! 🎉</div>
+                <div class="level-name" id="nextLevelName">جاري الانتقال...</div>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
